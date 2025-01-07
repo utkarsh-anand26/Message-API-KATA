@@ -32,6 +32,11 @@ Feature: Create a new message
     And the response should contain an error message "<errorMessage>"
 
     Examples:
-      | name | email       | phone       | subject | description                       | statusCode | errorMessage                |
-      |      | ut@ut.com   | 12345678901 | Tests   | Dummy test message for error case | 400        | Name may not be blank       |
-      | Test |             | 12345678901 | Tests   | Dummy test message for error case | 400        | Email may not be blank      |
+      | name   | email           | phone       | subject      | description                           | statusCode | errorMessage                                    |
+      |        | utkarsh@ut.com  | 12345678901 | Tests        | Dummy test message for error case     | 400        | Name may not be blank                           |
+      | George |                 | 12345678901 | Tests        | Dummy test message for error case     | 400        | Email may not be blank                          |
+      | George | Test@test.com   |    93812    | late arrival | Flight Delayed due to bad weather     | 400        | Phone must be between 11 and 21 characters.     |
+      | Philip | philip@test.com | 12345678901 | Test         | Description                           | 400        | Subject must be between 5 and 100 characters.   |
+      | Philip | philip@test.com | 12345678901 | Error Test   | Message                               | 400        | Message must be between 20 and 2000 characters. |
+      | Alina  | alina@.com      | 12345678901 | Error Test   | Dummy Message to test email error     | 400        | must be a well-formed email address             |
+      | George | Test@test.com   |             | late arrival | Flight Delayed                        | 400        | Phone may not be blank|
