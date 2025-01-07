@@ -33,6 +33,15 @@ public class CreateMessageStepDefinitions {
                 .post(endpoint);
     }
 
+    @When("customer sends a POST request with the following invalid data:")
+    public void i_send_a_post_request_with_the_following_invalid_data(String payload) {
+        // Sending the POST request with the provided payload
+        response = RestAssured.given()
+                .contentType("application/json")
+                .body(payload)
+                .post(endpoint);
+    }
+
     @Then("the response status code should be {int}")
     public void response_status_code(int statusCode) {
         Assert.assertEquals(statusCode, response.getStatusCode());
@@ -44,13 +53,12 @@ public class CreateMessageStepDefinitions {
                 .body("messageid", instanceOf(Integer.class));
     }
 
-    @Then("the response should contain:")
-    public void the_response_should_contain(DataTable dataTable) {
-        Map<String, String> expectedData = dataTable.asMaps().get(0);
+    @Then("the response should contain an error message {string}")
+    public void the_response_should_contain_an_error_message(String expectedErrorMessage) {
+        String actualErrorMessage = response.jsonPath().getString("fieldErrors[0]");
 
-        for (Map.Entry<String, String> entry : expectedData.entrySet()) {
-            response.then().body(entry.getKey(), equalTo(entry.getValue()));
-        }
+        assert actualErrorMessage.equals(expectedErrorMessage) :
+                "Expected error message: " + expectedErrorMessage + " but got: " + actualErrorMessage;
     }
 
     @Then("the response should match the JSON schema")
